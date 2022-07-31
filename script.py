@@ -97,18 +97,18 @@ def add_to_entries(current_file_name: str, current_file_path: str,
     entries[TYPE].append(current_type)
 
 
-def parse_file(txt_file: str) -> None:
+def parse_file(filename: str) -> None:
     """
     Read the given text file and add the data to the entries dictionary after parsing.
 
-    :param txt_file: Text file to parse
+    :param filename: Text file to parse
     :return: None
     """
     current_type = ''
     current_project = ''
     current_file_path = ''
     current_file_name = ''
-    with open(txt_file) as file:
+    with open(filename) as file:
         for line in file:
             tabs = get_num_tabs(line)
             line = remove_brackets(line)
@@ -132,17 +132,22 @@ def replace_extension(filename: str, new_extension: str) -> str:
     'data.py'
     >>> replace_extension('data.json', '')
     'data'
+    >>> replace_extension('data', '.json')
+    'data.json'
+    >>> replace_extension('data.txt.json', '.py')
+    'data.py'
 
-    :param filename:
-    :param new_extension:
-    :return:
+    :param filename: string representing filename with an extension at the end
+    :param new_extension: string representing extension to replace the previous one with
+    :return: new string with old extension replaced by new_extension
     """
     return filename.split('.')[0] + new_extension
 
 
 if __name__ == '__main__':
     verify_argv()
-    parse_file(argv[1])
+    txt_file = argv[1]
+    parse_file(txt_file)
     data_frame = DataFrame(entries, columns=COLUMNS)
-    data_frame.to_excel(replace_extension(argv[1], '.xlsx'), header=True, index_label='#',
-                        sheet_name=replace_extension(argv[1], ''))
+    data_frame.to_excel(replace_extension(txt_file, '.xlsx'), header=True, index_label='#',
+                        sheet_name=replace_extension(txt_file, ''))
