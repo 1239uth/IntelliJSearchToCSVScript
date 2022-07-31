@@ -1,0 +1,122 @@
+Targets
+    Occurrences of 'grade' in Project
+Found Occurrences in Project  (93 usages found)
+    Unclassified  (60 usages found)
+        cscb20-website  (60 usages found)
+              (31 usages found)
+                app.py  (28 usages found)
+                    38 grades = db.relationship('Grade', backref='author', lazy=True)  # Student has grades
+                    45 class Grade(db.Model):
+                    60 grade_id = db.Column(db.Integer, db.ForeignKey('Grade.id'), nullable=False)
+                    187 def view_grades():
+                    195 grades = get_grades(session['username'])
+                    197 for grade in grades:
+                    198 remark_request = RemarkRequest.query.filter_by(grade_id=grade.id).first()
+                    208 return render_template('view_grades.html', page_name=page_name, grades=grades, requests=requests)
+                    212 def submit_remark_request(grade_id):
+                    214 remark_request = RemarkRequest(grade_id=grade_id, details=details)
+                    257 grades = Grade.query.filter_by(user_id=student.id).all()
+                    263 create_grade(ass_name, weight, score, student.id)
+                    269 return render_template('view_student.html', page_name=page_name, student=student, grades=grades)
+                    283 grades = []
+                    286 grade = Grade.query.filter_by(id=request.grade_id).first()
+                    287 grades.append(grade)
+                    289 student = User.query.filter_by(id=grade.user_id).first()
+                    296 grades=grades,
+                    308 def edit_grade(username, grade_id):
+                    317 grade = Grade.query.filter_by(id=grade_id).first()
+                    318 return render_template('edit_grade.html', page_name=page_name, username=username, grade_id=grade_id,
+                    319 grade=grade)
+                    326 db.session.query(Grade).filter(Grade.id == grade_id).update({
+                    550 def create_grade(ass_name, weight, score, student_id):
+                    551 grade = Grade(ass_name=ass_name, weight=weight, score=score, user_id=student_id)
+                    552 db.session.add(grade)
+                    556 def get_grades(username):
+                    558 return Grade.query.filter_by(user_id=user.id).all()
+                assignment3.db  (3 usages found)
+                    7 	grade_id INTEGER NOT NULL,
+                    11 	FOREIGN KEY(grade_id) REFERENCES "Grade" (id)
+                    19 )�u�ItableGradeGradeCREATE TABLE "Grade" (
+            templates  (29 usages found)
+                edit_grade.html  (6 usages found)
+                    6 <h1>Edit grade</h1>
+                    9 <form action="/edit/student/{{username}}/grade/{{grade_id}}" method="post">
+                    13 <input type="text" required placeholder="" name="newAssName" value="{{grade.ass_name}}" required/>
+                    19 <input type="number" required placeholder="" name="newWeight" value="{{grade.weight}}" required/>
+                    25 <input type="number" required placeholder="" name="newScore" value="{{grade.score}}" required/>
+                    29 <button type="submit">Edit Grade</button>
+                template.html  (1 usage found)
+                    16 <a href="/view/grades">View Grades</a>
+                view_grades.html  (8 usages found)
+                    6 <h1>Your Grades</h1>
+                    19 {% if grades %}
+                    21 {% for grade in grades %}
+                    30 <p>{{grade.ass_name}} </p>
+                    31 <p>{{grade.score}}%</p>
+                    32 <p>{{grade.weight}}%</p>
+                    39 <form action="/remark_request/{{grade.id}}" method="post">
+                    60 <p>You do not have any grades yet.</p>
+                view_remark_requests.html  (3 usages found)
+                    25 <p>{{grades[loop.index0].ass_name}} </p>
+                    26 <p>{{grades[loop.index0].score}}</p>
+                    27 <p>{{grades[loop.index0].weight}}</p>
+                view_student.html  (10 usages found)
+                    19 <h1>Add Grade</h1>
+                    41 <button type="submit">Add Grade</button>
+                    49 <h1>{{student.name}}'s Grades</h1>
+                    52 {% if grades %}
+                    55 {% for grade in grades %}
+                    64 <p>{{grade.ass_name}} </p>
+                    65 <p>{{grade.score}}%</p>
+                    66 <p>{{grade.weight}}%</p>
+                    71 <form class="forBtn" action="/edit/student/{{student.username}}/grade/{{grade.id}}" method="get">
+                    81 <p>This student does not have any grades yet.</p>
+                view_students.html  (1 usage found)
+                    15 <a href="/view/student/{{student.username}}">View Grades</a>
+    Usage in comments  (3 usages found)
+        cscb20-website  (3 usages found)
+              (1 usage found)
+                app.py  (1 usage found)
+                    38 grades = db.relationship('Grade', backref='author', lazy=True)  # Student has grades
+            templates  (2 usages found)
+                view_student.html  (2 usages found)
+                    18 <!-- Form to add grades -->
+                    48 <!-- Existing grades -->
+    Usage in string constants  (30 usages found)
+        cscb20-website  (30 usages found)
+              (21 usages found)
+                app.py  (21 usages found)
+                    38 grades = db.relationship('Grade', backref='author', lazy=True)  # Student has grades
+                    46 __tablename__ = 'Grade'
+                    54 return f"Grade('{self.score}%')"
+                    60 grade_id = db.Column(db.Integer, db.ForeignKey('Grade.id'), nullable=False)
+                    181     View Grades
+                    186 @app.route('/view/grades')
+                    194 page_name = 'view_grades'
+                    208 return render_template('view_grades.html', page_name=page_name, grades=grades, requests=requests)
+                    211 @app.route('/remark_request/<grade_id>', methods=['POST'])
+                    219 return redirect(url_for('view_grades'))
+                    234 return redirect(url_for('view_grades'))
+                    243     View and add student grades
+                    254 return redirect(url_for('view_grades'))
+                    260 ass_name = request.form['gradeAssName']
+                    261 weight = request.form['gradeWeight']
+                    262 score = request.form['gradeScore']
+                    265 flash("Grade added", "success")
+                    278 return redirect(url_for('view_grades'))
+                    307 @app.route('/edit/student/<username>/grade/<grade_id>', methods=['GET', 'POST'])
+                    316 page_name = 'edit_grade'
+                    318 return render_template('edit_grade.html', page_name=page_name, username=username, grade_id=grade_id,
+            templates  (9 usages found)
+                edit_grade.html  (1 usage found)
+                    9 <form action="/edit/student/{{username}}/grade/{{grade_id}}" method="post">
+                template.html  (1 usage found)
+                    16 <a href="/view/grades">View Grades</a>
+                view_student.html  (7 usages found)
+                    23 <label for="gradeAssName">Assessment Name</label>
+                    25 <input type="text" required placeholder="Test 1" name="gradeAssName"/>
+                    29 <label for="gradeWeight">Weight (%)</label>
+                    31 <input type="number" required placeholder="15" name="gradeWeight"/>
+                    35 <label for="gradeScore">Student Score (%)</label>
+                    37 <input type="number" required placeholder="85" name="gradeScore"/>
+                    71 <form class="forBtn" action="/edit/student/{{student.username}}/grade/{{grade.id}}" method="get">
