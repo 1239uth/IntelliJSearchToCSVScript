@@ -1,0 +1,32 @@
+Targets
+    Occurrences of 'module' in Project
+Found Occurrences in Project  (19 usages found)
+    Unclassified  (12 usages found)
+        IntelliJSearchToCSVScript  (12 usages found)
+              (12 usages found)
+                Constants.py  (3 usages found)
+                    1 MODULES = ['Admin', 'Clinical', 'CRM']
+                    5 MODULE = 'Module'
+                    7 COLUMNS: [str] = [REFERENCE, PROJECT, MODULE, TYPE]
+                script.py  (9 usages found)
+                    3 from Constants import MODULES, MODULE, REFERENCE, PROJECT, TYPE, COLUMNS
+                    59 def get_module_from(references: [str]) -> str:
+                    64 {MODULES[0]}
+                    66 {MODULES[1]}
+                    73 for module in MODULES:
+                    75 if module.lower() in reference.lower():
+                    76 return module
+                    95 module = get_module_from([reference, current_project])
+                    96 entries[MODULE].append(module)
+    Usage in string constants  (7 usages found)
+        IntelliJSearchToCSVScript  (7 usages found)
+              (7 usages found)
+                Constants.py  (1 usage found)
+                    5 MODULE = 'Module'
+                script.py  (6 usages found)
+                    61     Gets the module name if it is a part of either of the references, or returns empty string otherwise.
+                    63     >>> get_module_from(['this_is_test_for_' + MODULES[0], 'some_project'])
+                    65     >>> get_module_from(['some_reference', 'some_' + MODULES[1]])
+                    67     >>> get_module_from(['no_module_in_reference', 'no_module_in_project'])
+                    70     :param references: list of references to check if module exists in either of them
+                    71     :return: name of a module if exists in any of the references, or empty string otherwise
